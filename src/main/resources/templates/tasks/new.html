@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление задачи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-container h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: -12px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Добавление задачи</h2>
+    <form th:method="POST" th:action="@{/tasks}" th:object="${task}">
+        <label for="taskName">Введите название задачи:</label>
+        <input type="text" th:field="*{taskName}" id="taskName"/>
+        <div class="error" th:if="${#fields.hasErrors('taskName')}" th:errors="*{taskName}">Task Name Error</div>
+
+        <label for="deadline">Введите срок выполнения:</label>
+        <input type="text" th:field="*{deadline}" id="deadline"/>
+        <div class="error" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}">Deadline Error</div>
+
+        <label for="difficulty">Введите сложность:</label>
+        <input type="text" th:field="*{difficulty}" id="difficulty"/>
+        <div class="error" th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}">Difficulty Error</div>
+
+        <input type="submit" value="Сохранить новую задачу"/>
+    </form>
+</div>
+
+</body>
+</html>

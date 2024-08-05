@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список задач</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .task-list {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .task-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .task-item:hover {
+            background-color: #f1f1f1;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-item span {
+            display: inline-block;
+        }
+        .task-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .add-task {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .add-task:hover {
+            background-color: #0056b3;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="task-list">
+    <div th:each="task : ${tasks}">
+        <a th:href="@{/tasks/{id}(id=${task.getId()})}" class="task-item">
+            <span class="task-label">Задача:</span>
+            <span th:text="${task.getTaskName()}">Task Name</span> <br/>
+            <span class="task-label">Срок выполнения:</span>
+            <span th:switch="${task.getDeadline()}">
+                <span th:case="'1'"  th:text="${task.getDeadline() + ' день (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'21'" th:text="${task.getDeadline() + ' день (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'2'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'3'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'4'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'22'" th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'23'" th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'24'" th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="*"    th:text="${task.getDeadline() + ' дней (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+            </span>
+            <br/>
+            <span class="task-label">Сложность:</span>
+            <span th:switch="${task.getDifficulty()}">
+                <span th:case="1" style="color: mediumseagreen"  th:text="Легкая"></span>
+                <span th:case="2" style="color: orange;" th:text="Средняя"></span>
+                <span th:case="3" style="color: red" th:text="Сложная"></span>
+            </span>
+            <hr/>
+        </a>
+    </div>
+</div>
+
+<br/>
+<hr/>
+
+<a href="/tasks/new" class="add-task">Добавить новую задачу</a>
+
+</body>
+</html>

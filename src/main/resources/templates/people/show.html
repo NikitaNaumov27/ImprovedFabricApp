@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Сотрудник</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .employee-info {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .tasks {
+            margin-top: 20px;
+        }
+        .tasks table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tasks th, .tasks td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .tasks th {
+            background-color: #f4f4f9;
+            font-weight: bold;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        .actions form {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .actions input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .actions input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .delete input[type="submit"] {
+            background-color: #f44336;
+        }
+        .delete input[type="submit"]:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="employee-info" th:text="${person.getFullName() + ', ' + person.getYearOfBirth() + ', ' + person.getPosition()}">VALUE</p>
+
+    <div th:if="${tasks.isEmpty()}">
+        <p>У сотрудника пока нет задач</p>
+        <hr/>
+    </div>
+
+    <div class="tasks" th:if="${!tasks.isEmpty()}">
+        <hr/>
+        <b>Задачи:</b>
+        <br/>
+        <table>
+            <thead>
+            <tr>
+                <th>Название задачи</th>
+                <th>Срок выполнения</th>
+                <th>Сложность</th>
+            </tr>
+            </thead>
+            <tbody th:each="task : ${tasks}">
+            <tr>
+                <td th:text="${task.getTaskName()}">Task Name</td>
+                <span th:switch="${task.getDeadline()}">
+                    <td th:case="'1'"   th:text="${task.getDeadline() + ' день (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'21'"  th:text="${task.getDeadline() + ' день (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'2'"   th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'3'"   th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'4'"   th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'22'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'23'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="'24'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                    <td th:case="*"     th:text="${task.getDeadline() + ' дней (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</td>
+                </span>
+                <span th:switch="${task.getDifficulty()}">
+                    <td th:case="1" style="color: mediumseagreen"  th:text="Легкая">Difficulty</td>
+                    <td th:case="2" style="color: orange;" th:text="Средняя">Difficulty</td>
+                    <td th:case="3" style="color: red" th:text="Сложная">Difficulty</td>
+                </span>
+            </tr>
+            </tbody>
+        </table>
+        <hr/>
+    </div>
+
+    <div class="actions">
+        <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+            <input type="submit" value="Редактировать сотрудника"/>
+        </form>
+
+        <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}" class="delete">
+            <input type="submit" value="Удалить сотрудника"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

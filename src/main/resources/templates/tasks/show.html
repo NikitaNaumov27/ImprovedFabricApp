@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Задача</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .task-details {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        .task-details p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .task-details .task-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .task-details span {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .task-details form {
+            margin-top: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        select, input[type="text"], input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: auto; /* Установка ширины по содержимому */
+            padding: 10px 20px; /* Увеличение отступов для более широкого контейнера */
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+        .assign-section, .edit-delete-section {
+            margin-bottom: 20px;
+        }
+        .edit-delete-section form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .edit-delete-section input[type="submit"] {
+            background-color: #007bff;
+            width: auto; /* Установка ширины по содержимому */
+            padding: 10px 20px; /* Увеличение отступов для более широкого контейнера */
+        }
+        .edit-delete-section input[type="submit"].delete-button {
+            background-color: #dc3545;
+        }
+        .edit-delete-section input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .edit-delete-section input[type="submit"].delete-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="task-details">
+    <span class="task-label">Задача:</span>
+    <span th:text="${task.getTaskName()}"></span> <br/>
+    <span class="task-label">Срок выполнения:</span>
+    <span th:switch="${task.getDeadline()}">
+                <span th:case="'1'"  th:text="${task.getDeadline() + ' день (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'21'" th:text="${task.getDeadline() + ' день (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'2'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'3'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'4'"  th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'22'" th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'23'" th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="'24'" th:text="${task.getDeadline() + ' дня (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+                <span th:case="*"    th:text="${task.getDeadline() + ' дней (до ' + localDate.plusDays(task.getDeadline()) + ')'}">Deadline</span>
+            </span>
+    <br/>
+    <span class="task-label">Сложность:</span>
+    <span th:switch="${task.getDifficulty()}">
+                <span th:case="1" style="color: mediumseagreen"  th:text="Легкая"></span>
+                <span th:case="2" style="color: orange;" th:text="Средняя"></span>
+                <span th:case="3" style="color: red" th:text="Сложная"></span>
+            </span>
+    <br/>
+    <div th:if="${owner}">
+        <span>Задача назначена: </span>
+        <b th:text="${owner.getFullName() + ' - ' + owner.getPosition()}"></b>
+        <form th:method="PATCH" th:action="@{/tasks/{id}/release(id=${task.getId()})}">
+            <input type="submit" value="Переназначить задачу"/>
+        </form>
+    </div>
+
+    <div th:if="${people}" class="assign-section">
+        <span>Эта задача не выполнена. Кому назначить её?</span>
+        <form th:method="PATCH" th:action="@{/tasks/{id}/assign(id=${task.getId()})}">
+            <label for="person">Выберите сотрудника</label>
+            <select th:object="${person}" th:field="*{id}" id="person">
+                <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getFullName() + ' - ' + person.getPosition()}">
+                </option>
+            </select>
+            <input type="submit" value="Назначить задачу этому сотруднику"/>
+        </form>
+    </div>
+</div>
+
+<hr/>
+
+<div class="edit-delete-section">
+    <form th:method="GET" th:action="@{/tasks/{id}/edit(id=${task.getId()})}">
+        <input type="submit" value="Редактировать задачу"/>
+    </form>
+
+    <form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.getId()})}">
+        <input type="submit" value="Удалить задачу" class="delete-button"/>
+    </form>
+</div>
+
+</body>
+</html>
