@@ -41,16 +41,20 @@
             font-weight: bold;
             color: #555;
         }
-        .add-task {
-            margin-top: 20px;
+        .button {
             display: inline-block;
+            margin-top: 20px;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
         }
-        .add-task:hover {
+        .button:hover {
             background-color: #0056b3;
         }
         hr {
@@ -95,7 +99,10 @@
 <br/>
 <hr/>
 
-<a href="/tasks/new" class="add-task">Добавить новую задачу</a>
+<a href="/tasks/new" class="button">Добавить новую задачу</a>
+<form th:action="@{/logout}" method="post">
+    <input class="button" type="submit" value="Выйти из аккаунта"/>
+</form>
 
 </body>
 </html>

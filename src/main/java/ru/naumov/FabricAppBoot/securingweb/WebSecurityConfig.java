@@ -1,5 +1,6 @@
 package ru.naumov.FabricAppBoot.securingweb;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,11 +32,12 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(@Value(value = "${admin.name}") String name,
+                                                 @Value(value = "${admin.password}") String password) {
         UserDetails user =
                 User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
+                        .username(name)
+                        .password(password)
                         .roles("ADMIN")
                         .build();
 

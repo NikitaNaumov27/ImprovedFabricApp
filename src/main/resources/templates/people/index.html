@@ -39,7 +39,7 @@
         .employee-list li a:hover {
             color: #007BFF;
         }
-        .add-employee {
+        .button {
             display: inline-block;
             margin-top: 20px;
             padding: 10px 20px;
@@ -48,8 +48,11 @@
             text-decoration: none;
             border-radius: 4px;
             transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            text-align: center;
         }
-        .add-employee:hover {
+        .button:hover {
             background-color: #45a049;
         }
     </style>
@@ -64,7 +67,10 @@
         </li>
     </ul>
     <hr/>
-    <a class="add-employee" href="/people/new">Добавить нового сотрудника</a>
+    <a class="button" href="/people/new">Добавить нового сотрудника</a>
+    <form th:action="@{/logout}" method="post">
+        <input class="button" type="submit" value="Выйти из аккаунта"/>
+    </form>
 </div>
 
 </body>
