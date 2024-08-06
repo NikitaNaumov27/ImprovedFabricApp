@@ -57,15 +57,15 @@ public class TasksService {
 
     @Transactional
     public void release(int id) {
-        tasksRepository.findById(id).ifPresent(book -> {
-            book.setOwner(null);
+        tasksRepository.findById(id).ifPresent(task -> {
+            task.setOwner(null);
         });
     }
 
     @Transactional
     public void assign(int id, Person selectedPerson) {
-        tasksRepository.findById(id).ifPresent(book -> {
-                    book.setOwner(selectedPerson);
+        tasksRepository.findById(id).ifPresent(task -> {
+                    task.setOwner(selectedPerson);
                 }
         );
     }
